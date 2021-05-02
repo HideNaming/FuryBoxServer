@@ -98,7 +98,7 @@ class Kernel extends ConsoleKernel
                     event(new AuctionEvent($item));
                 });
 
-                if (AuctionLot::whereNotNull('finish')->count() == 0) {
+                if (AuctionLot::whereNull('finish')->count() == 0) {
                     AuctionLot::factory()->count(rand(40, 100))->create();
                 }
 
