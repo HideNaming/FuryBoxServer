@@ -34,11 +34,10 @@ Route::prefix('v1')->group(function () {
      */
     Route::group(['middleware' => 'auth:api'], function () {
         Route::prefix('auth')->group(function () {
-            Route::post('logout', [AuthController::class, 'logout']);
             Route::post('refresh', [AuthController::class, 'refresh']);
             Route::post('me', [AuthController::class, 'me']);
             Route::get('permissions', PermissionController::class);
-
+            Route::post('logout', [AuthController::class, 'logout']);
             Route::post('changedata', [ProfileController::class, 'changeData']);
             Route::post('changepassword', [ProfileController::class, 'changePassword']);
             Route::post('imageupload', [ProfileController::class, 'imageUpload']);
@@ -68,7 +67,10 @@ Route::prefix('v1')->group(function () {
     /*
      * Auth
      */
-    Route::post('auth/register', [RegisterController::class, 'register']);
+    Route::prefix('auth')->group(function () {
+        Route::post('register', [RegisterController::class, 'register']);
+        Route::middleware('throttle:1,3')->post('login', [AuthController::class, 'login']);
+    });
     /*
          * Social
          */
@@ -76,7 +78,6 @@ Route::prefix('v1')->group(function () {
         Route::post('{driver}', [OAuthController::class, 'redirect']);
         Route::get('{driver}/callback', [OAuthController::class, 'handleCallback'])->name('oauth.callback');
     });
-    Route::post('auth/login', [AuthController::class, 'login']);
 
     /*
      * Admin Panel

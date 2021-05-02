@@ -1,7 +1,7 @@
 var http = require("http").Server()
 var io = require("socket.io")(http, {
     cors: {
-        origin: "http://localhost:3000",
+        origin: "*",
         credentials: true
     }
 })
@@ -13,7 +13,6 @@ redis.psubscribe('stat-chanel')
 redis.psubscribe('auction')
 
 redis.on("pmessage", (pattern, channel, message) => {
-    console.log(`Received ${message} from ${channel}`);
     message = JSON.parse(message)
     io.emit(channel+":"+message.event, message.data)
 });
