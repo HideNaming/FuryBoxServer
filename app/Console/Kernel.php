@@ -46,9 +46,6 @@ class Kernel extends ConsoleKernel
                 AuctionLot::whereDate('created_at', Carbon::now()->subMonth())->delete();
                 AuctionRate::whereDate('created_at', Carbon::now()->subMonth())->delete();
 
-                if (AuctionLot::whereNotNull('finish')->count() == 0) {
-                    AuctionLot::factory()->count(rand(40, 100))->create();
-                }
                 $lot = AuctionLot::where("updated", "<=", Carbon::now()->subMinutes(rand(20, 60))->timestamp)->where('finished', '>', \Carbon\Carbon::now()->timestamp)->whereNull('user_id')->inRandomOrder()->first();
 
                 if (!is_null($lot)) {
@@ -100,6 +97,10 @@ class Kernel extends ConsoleKernel
                     $item->save();
                     event(new AuctionEvent($item));
                 });
+
+                if (AuctionLot::whereNotNull('finish')->count() == 0) {
+                    AuctionLot::factory()->count(rand(40, 100))->create();
+                }
 
                 $feed = Feed::factory()->count(rand(1, 2))->create();
                 Feed::whereDate('created_at', Carbon::yesterday()->subDays(1))->delete();

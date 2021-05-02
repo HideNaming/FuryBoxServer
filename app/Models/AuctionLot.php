@@ -30,7 +30,8 @@ class AuctionLot extends Model
     }
     public function getBoxAttribute()
     {
-        return Box::find($this->loot->box_id);
+        $box = Box::where('id', $this->loot->box_id)->select('name', 'price', 'slug', 'image')->first();
+        return $box;
     }
     public function getBenefitAttribute()
     {
