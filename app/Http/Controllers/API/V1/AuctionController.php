@@ -83,7 +83,7 @@ class AuctionController extends Controller
 
     public function list()
     {
-        return AuctionLot::whereNull('finish')->orderBy('finished', 'asc')->paginate(18);
+        return AuctionLot::whereNull('finish')->orderBy('finished', 'asc')->paginate(9);
     }
 
     public function get($id)
