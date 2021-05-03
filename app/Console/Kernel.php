@@ -65,7 +65,7 @@ class Kernel extends ConsoleKernel
                     event(new AuctionEvent($lot));
                 }
 
-                AuctionLot::where('finished', '<', \Carbon\Carbon::now()->timestamp)->whereNotNull('user_id')->whereNull('finish')->get()->each(function ($item) use ($lot) {
+                AuctionLot::where('finished', '<', \Carbon\Carbon::now()->timestamp)->whereNotNull('user_id')->whereNull('finish')->get()->each(function ($item) {
                     $languages = [
                         "ru_RU",
                         "en_US"
@@ -76,7 +76,7 @@ class Kernel extends ConsoleKernel
                     $gender = $faker->randomElement(['male', 'female']);
 
                     $item->rate = $faker->firstName($gender) . ' ' . $faker->lastName($gender);
-                    $item->price = ceil($lot->price + $lot->stap);
+                    $item->price = ceil($item->price + $item->stap);
                     $item->updated = Carbon::now()->timestamp;
                     $item->finish = 1;
                     $item->save();
@@ -92,7 +92,7 @@ class Kernel extends ConsoleKernel
                     event(new AuctionEvent($item));
                 });
 
-                AuctionLot::where('finished', '<', \Carbon\Carbon::now()->timestamp)->whereNull('user_id')->whereNull('finish')->get()->each(function ($item) use ($lot) {
+                AuctionLot::where('finished', '<', \Carbon\Carbon::now()->timestamp)->whereNull('user_id')->whereNull('finish')->get()->each(function ($item) {
                     $item->finish = 1;
                     $item->save();
                     event(new AuctionEvent($item));
