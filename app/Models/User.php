@@ -49,7 +49,7 @@ class User extends Authenticatable implements JWTSubject
 
     public function getOrdersAttribute()
     {
-        return Order::where('user_id', $this->id)->orderBy('created_at', 'desc')->limit(5)->get();
+        return Order::where('user_id', $this->id)->where('status', 'paid')->orderBy('created_at', 'desc')->limit(5)->get();
     }
 
     public function getJWTIdentifier()

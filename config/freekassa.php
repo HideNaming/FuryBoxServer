@@ -50,14 +50,14 @@ return [
      *  _orderStatus
      *  _orderSum
      */
-    'searchOrder' => null, //  'App\Http\Controllers\FreeKassaController@searchOrder',
+    'searchOrder' => 'App\Http\Controllers\API\V1\PaymentController@searchOrder', //  'App\Http\Controllers\FreeKassaController@searchOrder',
 
     /*
      *  PaidOrder
      *  If current _orderStatus from DB != paid then call PaidOrderFilter
      *  update order into DB & other actions
      */
-    'paidOrder' => null, //  'App\Http\Controllers\FreeKassaController@paidOrder',
+    'paidOrder' => 'App\Http\Controllers\API\V1\PaymentController@paidOrder', //  'App\Http\Controllers\FreeKassaController@paidOrder',
 
     /*
      * Customize error messages

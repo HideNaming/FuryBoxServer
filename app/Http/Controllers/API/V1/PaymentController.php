@@ -41,9 +41,7 @@ class PaymentController extends Controller
         $order = Order::where('id', $order_id)->first();
 
         if ($order) {
-            $order['_orderSum'] = $order->sum;
-            $order['_orderStatus'] = $order['status'];
-            $order['_orderStatus'] = ('1' == $order['status']) ? 'paid' : false;
+            $order['amount'] = $request->input('AMOUNT');
             return $order;
         }
 
@@ -87,7 +85,7 @@ class PaymentController extends Controller
         }
 
         $user = User::findOrFail($order->user_id);
-        if ($user->created_at->lt(Carbon::now()->subHours(12)) && count($user->payments) == 0) {
+        if ($user->created_at->lt(Carbon::now()->subHours(12)) && count((array) $user->payments) == 0) {
             $bonus_percent = $bonus_percent + 0.2;
         }
 
