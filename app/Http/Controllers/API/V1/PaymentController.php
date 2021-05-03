@@ -85,7 +85,7 @@ class PaymentController extends Controller
         }
 
         $user = User::findOrFail($order->user_id);
-        if ($user->created_at->lt(Carbon::now()->subHours(12)) && count((array) $user->payments) == 0) {
+        if ($user->created_at->lt(Carbon::now()->subHours(12)) && count((array) $user->orders) == 0) {
             $bonus_percent = $bonus_percent + 0.2;
         }
 
