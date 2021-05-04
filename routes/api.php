@@ -51,7 +51,7 @@ Route::prefix('v1')->group(function () {
             Route::post('delivery', [CartController::class, 'delivery']);
         });
         Route::get('sell/{id}', [CartController::class, 'sell']);
-        Route::post('payment', [PaymentController::class, 'redirect']);
+        Route::post('payment', [PaymentController::class, 'pay']);
         Route::post('auction/rate', [AuctionController::class, 'rate']);
         Route::get('auction/personal', [AuctionController::class, 'personal']);
     });
@@ -62,8 +62,10 @@ Route::prefix('v1')->group(function () {
     Route::get('open/demo/{box}', [OpenController::class, 'demo']);
     Route::get('open/last_top_gift/{box}', [OpenController::class, 'last_top_gift']);
     Route::get('stats', [StatController::class, 'stat']);
-    Route::get('/payment/handler', [PaymentController::class, 'handlePayment']);
-    
+    Route::get('payment/handler/freekassa', [PaymentController::class, 'handleFreekassa']);
+    Route::get('payment/handler/qiwi', [PaymentController::class, 'handleQiwi']);
+    Route::get('payment/{id}', [PaymentController::class, 'getOrder']);
+    Route::post('payment/link', [PaymentController::class, 'link']);
     /*
      * Auth
      */

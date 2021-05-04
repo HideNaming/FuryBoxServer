@@ -21,6 +21,7 @@
         "maksa988/laravel-freekassa": "^4.0",
         "php-http/guzzle7-adapter": "^1.0",
         "predis/predis": "^1.1",
+        "qiwi/bill-payments-php-sdk": "^0.1.2",
         "socialiteproviders/discord": "^4.1",
         "socialiteproviders/steam": "^4.1",
         "socialiteproviders/vkontakte": "^4.2",
