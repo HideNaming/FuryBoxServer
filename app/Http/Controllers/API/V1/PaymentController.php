@@ -103,7 +103,7 @@ class PaymentController extends Controller
             $bonus_percent = $bonus_percent + 0.2;
         }
 
-        if ($order->code = '2020') 
+        if ($order->code == '2020') 
             $bonus_percent + 0.2;
 
         return $bonus_percent;
