@@ -73,9 +73,7 @@ class PaymentController extends Controller
     public function searchOrder(Request $request, $order_id)
     {
         $order = Order::where('id', $order_id)->first();
-
         if ($order) {
-            if ($order->method == 'qiwi') return $order;
             $order['amount'] = $request->input('AMOUNT');
             return $order;
         }
@@ -126,7 +124,7 @@ class PaymentController extends Controller
             $order->amount = $response['amount']['value'];
             $order->save();
             if ($response['status']['value'] == 'PAID')
-                $this->searchOrder($request, $order->id);
+                $this->paidOrder($request, $order);
         });
     }
 
