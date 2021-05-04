@@ -122,10 +122,10 @@ class PaymentController extends Controller
     {
         $billPayments = new \Qiwi\Api\BillPayments(config('qiwi.secret_key'));
         $orders = Order::where('method', 'qiwi')->where('status', '!=', 'paid')->each(function($order) use($billPayments, $request) {
-            $response = (object) $billPayments->getBillInfo($order->id);
-            $order->amount = $response->amount->value;
+            $response = $billPayments->getBillInfo($order->id);
+            $order->amount = $response['amount']['value'];
             $order->save();
-            if ($response->status->value == 'PAID')
+            if ($response['status']['value'] == 'PAID')
                 $this->searchOrder($request, $order->id);
         });
     }
