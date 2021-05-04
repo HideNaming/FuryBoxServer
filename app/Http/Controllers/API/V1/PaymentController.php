@@ -44,6 +44,7 @@ class PaymentController extends Controller
     {
         $order = Order::findOrFail($request->input('id'));
         $order->method = $request->input('method');
+        $order->code = $request->input('code');
 
         if ($order->method == 'freekassa') {
             $rows = [
@@ -92,6 +93,7 @@ class PaymentController extends Controller
             ["input" => 5000, "bonus" => 50],
         ];
         $bonus_percent = 0;
+        
 
         foreach ($bonuses as $bonus) {
             if ($order->amount >= $bonus['input']) $bonus_percent = $bonus['bonus'] / 100;
@@ -100,6 +102,9 @@ class PaymentController extends Controller
         if ($user->created_at->addHours(12)->gt(Carbon::now()) && $user->orders->count() == 0) {
             $bonus_percent = $bonus_percent + 0.2;
         }
+
+        if ($order->code = '2020') 
+            $bonus_percent + 0.2;
 
         return $bonus_percent;
     }
