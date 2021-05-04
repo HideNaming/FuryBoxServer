@@ -116,22 +116,15 @@ class PaymentController extends Controller
         return true;
     }
 
-    public function handleQiwi()
+    public function handleQiwi(Request $request)
     {
         $billPayments = new \Qiwi\Api\BillPayments(config('qiwi.secret_key'));
-        $orders = Order::where('method', 'qiwi')->where('status', '!=', 'paid')->each(function($order) use($billPayments) {
+        $orders = Order::where('method', 'qiwi')->where('status', '!=', 'paid')->each(function($order) use($billPayments, $request) {
             $response = $billPayments->getBillInfo($order->id);
             $order->amount = $response['amount']['value'];
             $order->save();
-            if ($response['status']['value'] == 'PAID') {
-                $user = User::findOrFail($order->user_id);
-                $calc = $order->amount + $order->amount * $this->Bonus($order, $user);
-        
-                $user->money = $user->money + $calc;
-                $order->status = 'paid';
-                $order->save();
-                $user->save();
-            }
+            if ($response['status']['value'] == 'PAID') 
+                $this->paidOrder($request, $order);
         });
     }
 

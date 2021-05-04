@@ -34,9 +34,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->call(function () {
-            while (true) {
-                (new \App\Http\Controllers\API\V1\PaymentController)->handleQiwi();
-                
+            while (true) {             
                 $boxes = Box::all();
                 foreach ($boxes as $box) {
                     $box->views = ceil(rand(25, 50) / $box->price * 500);

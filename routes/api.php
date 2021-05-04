@@ -63,7 +63,7 @@ Route::prefix('v1')->group(function () {
     Route::get('open/last_top_gift/{box}', [OpenController::class, 'last_top_gift']);
     Route::get('stats', [StatController::class, 'stat']);
     Route::get('payment/handler/freekassa', [PaymentController::class, 'handleFreekassa']);
-    Route::get('payment/handler/qiwi', [PaymentController::class, 'handleQiwi']);
+    Route::post('payment/handler/qiwi', [PaymentController::class, 'handleQiwi']);
     Route::get('payment/{id}', [PaymentController::class, 'getOrder']);
     Route::post('payment/link', [PaymentController::class, 'link']);
     /*
