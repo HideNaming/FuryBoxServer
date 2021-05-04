@@ -25,6 +25,7 @@ class PaymentController extends Controller
             "user_id" => Auth::id(),
             "amount" => $request->input('amount'),
             "partner" => $request->input('partner'),
+            "code" => $request->input('code'),
             "status" => 'process',
         ]);
 
@@ -44,7 +45,6 @@ class PaymentController extends Controller
     {
         $order = Order::findOrFail($request->input('id'));
         $order->method = $request->input('method');
-        $order->code = $request->input('code');
 
         if ($order->method == 'freekassa') {
             $rows = [
