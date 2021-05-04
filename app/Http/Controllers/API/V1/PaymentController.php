@@ -119,7 +119,7 @@ class PaymentController extends Controller
     public function handleQiwi()
     {
         $billPayments = new \Qiwi\Api\BillPayments(config('qiwi.secret_key'));
-        $orders = Order::where('method', 'qiwi')->where('status', '!=', 'paid')->each(function($order) use($billPayments, $request) {
+        $orders = Order::where('method', 'qiwi')->where('status', '!=', 'paid')->each(function($order) use($billPayments) {
             $response = $billPayments->getBillInfo($order->id);
             $order->amount = $response['amount']['value'];
             $order->save();
