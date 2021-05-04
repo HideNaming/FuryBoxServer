@@ -61,9 +61,9 @@ class PaymentController extends Controller
                 'customFields' => [
                     'themeCode' => 'Yvan-T8FpAz5afI',
                     'paySourcesFilter' => $request->input('payment_id')
-                ],
-                'lifetime' => $order->created_at
+                ]
             ];
+            $order->save();
             $url = $billPayments->createPaymentForm($params);
         }
 
