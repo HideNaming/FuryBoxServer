@@ -65,6 +65,7 @@ Route::prefix('v1')->group(function () {
     Route::get('payment/handler/freekassa', [PaymentController::class, 'handleFreekassa']);
     Route::post('payment/handler/qiwi', [PaymentController::class, 'handleQiwi']);
     Route::get('payment/{id}', [PaymentController::class, 'getOrder']);
+    Route::get('promo', [PaymentController::class, 'getPromo']);
     Route::post('payment/link', [PaymentController::class, 'link']);
     /*
      * Auth

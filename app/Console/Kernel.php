@@ -5,14 +5,17 @@ namespace App\Console;
 use Carbon\Carbon;
 use App\Models\Box;
 use App\Events\AuctionEvent;
+use App\Events\AuctionTop;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use App\Events\BoxEvent;
 use App\Events\Stats;
+use App\Events\PromoEvent;
 use App\Models\Feed;
 use App\Models\AuctionLot;
 use App\Models\AuctionRate;
 use App\Models\User;
+use App\Models\Promo;
 
 class Kernel extends ConsoleKernel
 {
@@ -34,7 +37,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->call(function () {
-            while (true) {             
+            while (true) {
                 $boxes = Box::all();
                 foreach ($boxes as $box) {
                     $box->views = ceil(rand(25, 50) / $box->price * 500);
@@ -98,8 +101,23 @@ class Kernel extends ConsoleKernel
                     event(new AuctionEvent($item));
                 });
 
-                if (AuctionLot::whereNull('finish')->count() == 0) {
+                if (AuctionLot::whereNull('finish')->count() == 0 && \Carbon\Carbon::now()->format('G') == 0) {
                     AuctionLot::factory()->count(rand(40, 100))->create();
+                    $all = AuctionLot::whereNull('finish')->get()->toArray();
+                    usort($all, function ($a, $b) {
+                        return $a['benefit'] < $b['benefit'] ? 1 : -1;
+                    });
+                    event(new AuctionTop(array_slice($all, 0, 3), AuctionLot::count()));
+                }
+
+                if (Promo::where('everyday', true)->whereDate('created_at', \Carbon\Carbon::now())->count() == 0) {
+                    Promo::where('everyday', true)->delete();
+                    $promo = Promo::create([
+                        "code" => strtoupper(str_random(10)),
+                        "percent" => rand(1,5) * 10,
+                        "everyday" => true
+                    ]);
+                    event(new PromoEvent($promo));
                 }
 
                 $feed = Feed::factory()->count(rand(1, 2))->create();

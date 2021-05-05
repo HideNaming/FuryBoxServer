@@ -4,16 +4,12 @@ namespace App\Http\Controllers\API\V1;
 
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Box;
 use App\Models\User;
-use App\Models\Cart;
-use App\Models\Feed;
+use App\Models\Promo;
 use App\Models\Order;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Maksa988\FreeKassa\Facades\FreeKassa;
-use App\Events\Stats;
-use App\Events\BoxEvent;
 
 class PaymentController extends Controller
 
@@ -39,6 +35,11 @@ class PaymentController extends Controller
 
         $order->cashback = $order->amount * $this->Bonus($order, $user);
         return $order;
+    }
+
+    public function getPromo()
+    {
+        return Promo::where('everyday', true)->first();
     }
 
     public function link(Request $request)
@@ -103,8 +104,8 @@ class PaymentController extends Controller
             $bonus_percent = $bonus_percent + 0.2;
         }
 
-        if ($order->code == '2020') 
-            $bonus_percent = $bonus_percent + 0.2;
+        if (Promo::where('code', $order->code)->count() > 0) 
+            $bonus_percent = $bonus_percent + Promo::where('code', $order->code)->first()->percent / 100;
 
         return $bonus_percent;
     }
