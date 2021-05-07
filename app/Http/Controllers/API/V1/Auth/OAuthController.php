@@ -19,6 +19,7 @@ class OAuthController extends Controller
         $this->middleware('guest');
         config([
             'services.vkontakte.redirect' => route('oauth.callback', 'vkontakte'),
+            'services.discord.redirect' => route('oauth.callback', 'discord'),
         ]);
     }
 
