@@ -32,7 +32,7 @@ class OAuthController extends Controller
 
     public function handleCallback($provider)
     {
-        $socialiteUser = Socialite::driver($provider)->user();
+        $socialiteUser = Socialite::driver($provider)->stateless()->user();
 
         $user = $this->findOrCreateUser($provider, $socialiteUser);
         
